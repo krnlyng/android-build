@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -n "`$SHELL -c 'echo $ZSH_VERSION'`" ]; then
+	bash --rcfile $HELPER_DIR/startup.rc
+else
+	source $HELPER_DIR/startup.rc
+fi
+

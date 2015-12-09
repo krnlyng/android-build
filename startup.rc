@@ -1,0 +1,7 @@
+
+source ~/.bashrc
+
+cd $SOURCE_DIR
+
+source $HELPER_DIR/generic
+

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [ ! -d $TOOL_DIR/session ]; then
+	mkdir -p $TOOL_DIR/session
+fi
+
+if [ `stat -c %U $TOOL_DIR/session` != $USER ]; then
+	chown $USER $TOOL_DIR/session
+fi
+export HISTFILE=$TOOL_DIR/session/.bash_history
+
+if [ "$GCC_VERSION" != "" ]; then
+	echo "Setting up gcc..."
+	export CC=gcc-$GCC_VERSION
+	export CXX=g++-$GCC_VERSION
+	export CPP=cpp-$GCC_VERSION
+	export LD=gcc-$GCC_VERSION
+fi
+
+if [ `readlink -f $TOOL_DIR/make` != "/usr/bin/make-$MAKE_VERSION" ]; then
+	echo "Setting up make..."
+	rm -rf $TOOL_DIR/make
+	ln -s /usr/bin/make-$MAKE_VERSION $TOOL_DIR/make
+fi
+
+if [ `readlink -f $TOOL_DIR/python` != "/usr/bin/python$PYTHON_VERSION" ]; then
+	echo "Setting up python..."
+	rm -rf $TOOL_DIR/python
+	ln -s /usr/bin/python$PYTHON_VERSION $TOOL_DIR/python
+	rm -rf $TOOL_DIR/python-config
+	ln -s /usr/bin/python$PYTHON_VERSION-config $TOOL_DIR/python-config
+fi
+	
+
+if [ `archlinux-java get` != "$JAVA_VERSION" ]; then
+	echo "Setting up java..."
+	sudo archlinux-java set $JAVA_VERSION
+fi
+
+grep "$TOOL_DIR" <<< $PATH > /dev/null
+if [ $? != 0 ]; then
+	export PATH="$HELPER_DIR:$TOOL_DIR:$PATH"
+fi
+
+function cd() {
+	if [ "$1" = "" ]; then
+		builtin cd $SOURCE_DIR
+	else
+		builtin cd $@
+	fi
+	if [[ "`pwd`" != "$SOURCE_DIR"* ]]; then
+		echo WARNING: outside of $SOURCE_DIR
+	fi
+}
+
+source build/envsetup.sh
+

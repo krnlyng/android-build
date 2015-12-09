@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export HELPER_DIR="$HOME/bin"
+
+export JAVA_VERSION="java-6-jre/jre"
+export MAKE_VERSION="3.81"
+export TOOL_DIR="$HOME/bin/nitdroid-build"
+export PYTHON_VERSION="2.7"
+
+export SOURCE_DIR="$HOME/coding/nitdroid_test"
+
+source $HELPER_DIR/startup
+
